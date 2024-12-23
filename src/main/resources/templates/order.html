@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" th:replace="~{template :: template(~{::title}, ~{::content})}">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freelancer's Dream - Детали заказа</title>
+    <title>Bsuir delivery service - Детали заказа</title>
     <link href="/static/css/styles.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -14,43 +14,32 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h1 th:text="${order.title}">Детали заказа</h1>
+                    <h5>Заказ пользователя</h5>
+                    <h1 th:text="${order.user.getEmail()}"></h1>
                 </div>
                 <div class="card-body">
-                    <h5>Описание</h5>
-                    <p th:text="${order.description}" class="mb-4">Описание заказа...</p>
+                    <h5>Позиции:</h5>
+                    <p th:text="${food.name}" class="mb-4"></p>
 
                     <h5>Детали</h5>
                     <ul class="list-group mb-4">
                         <li class="list-group-item">
-                            <strong>Бюджет:</strong> <span th:text="${order.budget}">0.00</span> руб.
+                            <strong>Статус:</strong> <span th:text="${order.status}"></span>
                         </li>
                         <li class="list-group-item">
-                            <strong>Крайний срок:</strong> <span th:text="${#temporals.format(order.dueDate, 'dd.MM.yyyy')}">01.01.2025</span>
+                            <strong>Крайний срок:</strong> <span th:text="${#temporals.format(order.dueDate ,'dd.MM.yyyy')}">01.01.2025</span>
                         </li>
                         <li class="list-group-item">
-                            <strong>Создатель:</strong> <span th:text="${order.getCreatedBy().firstName} + ' ' + ${order.getCreatedBy().lastName}">Имя заказчика</span>
+                            <strong>Имя заказчика:</strong> <span th:text="${order.user.firstname} + ' ' + ${order.user.lastname}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Адрес доставки:</strong> <span th:text="${order.address}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Цена заказа:</strong> <span th:text="${food.price}"></span>
                         </li>
                     </ul>
-
-<!--                    <h5>Контакты</h5>-->
-<!--                    <p th:text="${order.contactInfo}" class="mb-4">Контактная информация заказчика...</p>-->
-
-                    <div class="text-center" th:if="${isOwner}">
-                        <a th:href="@{/order/{orderId}/applications(orderId=${order.id})}" class="btn btn-primary">
-                            Просмотреть отклики
-                        </a>
-                        <a th:href="@{/orders}" class="btn btn-secondary">
-                            Назад к списку заказов
-                        </a>
-                    </div>
-                    
-                    <div class="text-center" th:if="${!isOwner}">
-                        <button type="button" th:if="${!alreadyApplied}" th:onclick="'createApplication(' + ${order.getId()} + ',' + ${currentUser.getId()} + ')'" class="btn btn-primary">
-                            Откликнуться
-                        </button>
-                        <span th:if="${alreadyApplied}">Вы уже откликнулись на этот заказ</span>
-                        <a th:href="@{/orders}" class="btn btn-secondary">
+                   <a th:href="@{/orders}" class="btn btn-secondary">
                             Назад к списку заказов
                         </a>
                     </div>
