@@ -18,6 +18,10 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
+    private final List<OrderDto> orderStatus = new ArrayList<>() {{
+        add(new OrderDto(OrderStatus.APPROVED, "Одобрено"));
+        add(new OrderDto(OrderStatus.DECLINED, "Отклонено"));
+    }};
 
     public OrderController(OrderService orderService, UserService userService) {
         this.orderService = orderService;
@@ -27,10 +31,6 @@ public class OrderController {
     @GetMapping("/order/{orderId}/applications")
     public String showOrder(Model model, @PathVariable Long orderId) {
         Order order = orderService.getOrderInfo(orderId);
-        List<OrderDto> orderStatus = new ArrayList<>() {{
-            add(new OrderDto(OrderStatus.APPROVED, "Одобрено"));
-            add(new OrderDto(OrderStatus.DECLINED, "Отклонено"));
-        }};
 
         model.addAttribute("order", order);
         model.addAttribute("approvedOrderStatus", OrderStatus.APPROVED);
@@ -43,10 +43,6 @@ public class OrderController {
     @GetMapping("/order/{orderId}")
     public String showOrder(Model model, @PathVariable Long orderId, Long applicationId) {
         Order order = orderService.getOrderInfo(orderId);
-        List<OrderDto> orderStatus = new ArrayList<>() {{
-            add(new OrderDto(OrderStatus.APPROVED, "Одобрено"));
-            add(new OrderDto(OrderStatus.DECLINED, "Отклонено"));
-        }};
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userService.findByEmail(authentication.getName());
 
@@ -59,11 +55,6 @@ public class OrderController {
     @GetMapping("/orders")
     public String ShowAllOrders(Model model) {
         List<Order> orders = orderService.orders();
-        List<OrderDto> orderStatus = new ArrayList<>() {{
-            add(new OrderDto(OrderStatus.APPROVED, "Одобрено"));
-            add(new OrderDto(OrderStatus.DECLINED, "Отклонено"));
-        }};
-
 
         model.addAttribute("status", orderStatus);
         model.addAttribute("orders", orders);
