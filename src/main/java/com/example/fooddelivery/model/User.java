@@ -1,13 +1,20 @@
 package com.example.fooddelivery.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
+import java.time.LocalDate;
+import java.util.List;
+
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="user")
+@Table(name="users")
 public class User {
 
 	@Id
@@ -15,28 +22,23 @@ public class User {
 	@Column(name="id")
 	private int id;
 
-	@Column(name="first_name")
+	@Column(nullable = false)
 	private String firstname;
 
-	@Column(name="last_name")
+	@Column(nullable = false)
 	private String lastname;
 
-	@Column(name="email_id")
-	private String emailid;
+	@Column(nullable=false, unique=true)
+	private String email;
 
-	@Column(name="password")
+	@Column(nullable = false)
 	private String password;
 
-	@Column(name="mobile_no")
-	private String mobileno;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
-	@Column(name="street")
-	private String street;
-
-	@Column(name="city")
-	private String city;
-
-	@Column(name="pincode")
-	private String pincode;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<Order> orders;
 
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @Entity
@@ -18,19 +20,9 @@ public class Food {
     @Column(name="name")
     private String name;
 
-    @Column(name="description")
-    private String description;
-
     @Column(name="price")
     private double price;
 
-    @Column(name="discount")
-    private double discount;
-
-    @Column(name="image_path")
-    private String imagePath;
-
-    @Column(name="category_id")
-    private int categoryId;
-
+    @ManyToMany(mappedBy = "foods", fetch = FetchType.EAGER)
+    private List<Order> orders;
 }
