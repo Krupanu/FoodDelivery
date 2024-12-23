@@ -3,18 +3,31 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Setter
 @Getter
 @Entity
-@Table(name="orders")
+@Table(name="order")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private LocalDate dueDate;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
@@ -31,5 +44,9 @@ public class Order {
             inverseJoinColumns = {@JoinColumn(name = "food_id", referencedColumnName = "id")}
     )
     private List<Food> foods;
+
+    @OneToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
 }

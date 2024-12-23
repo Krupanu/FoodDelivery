@@ -2,6 +2,7 @@ package com.example.fooddelivery.controller;
 
 import com.example.fooddelivery.dto.OrderDto;
 import com.example.fooddelivery.model.*;
+import com.example.fooddelivery.service.FoodService;
 import com.example.fooddelivery.service.OrderService;
 import com.example.fooddelivery.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -18,14 +19,16 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
+    private final FoodService foodService;
     private final List<OrderDto> orderStatus = new ArrayList<>() {{
         add(new OrderDto(OrderStatus.APPROVED, "Одобрено"));
         add(new OrderDto(OrderStatus.DECLINED, "Отклонено"));
     }};
 
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService, UserService userService, FoodService foodService) {
         this.orderService = orderService;
         this.userService = userService;
+        this.foodService = foodService;
     }
 
     @GetMapping("/order/{orderId}/applications")
@@ -41,14 +44,17 @@ public class OrderController {
     }
 
     @GetMapping("/order/{orderId}")
-    public String showOrder(Model model, @PathVariable Long orderId, Long applicationId) {
+    public String showOrder(Model model, @PathVariable Long orderId, Long applicationId, Long foodId) {
         Order order = orderService.getOrderInfo(orderId);
+ 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userService.findByEmail(authentication.getName());
+        Food food = foodService.getFoodInfo(orderId);
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("order", order);
         model.addAttribute("status", orderStatus);
+        model.addAttribute("food", food);
         return "order";
     }
 
@@ -66,7 +72,10 @@ public class OrderController {
     public String CreateOrder(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userService.findByEmail(authentication.getName());
+        List<Food> foods = foodService.foods();
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("foods", foods);
+
         
         return "new_order";
     }
