@@ -22,7 +22,7 @@
           <div class="mb-3">
             <label for="foods" class="form-label">Выберете бургер</label>
             <select id="foods" class="form-select" th:field="*{foods}" required>
-              <option th:each="food : ${foods}" th:text="${food.name}" th:value="${food.}"></option>
+              <option th:each="food : ${foods}" th:text="${food.name}" th:value="${}"></option>
             </select>
           </div>
 
